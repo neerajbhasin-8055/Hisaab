@@ -15,7 +15,7 @@ export default function Add({ editId, done }: { editId: string | null; done: () 
     if (e) return done()
     setMsg('Saved ' + fmt(p) + '. Add another, or go back to Home.'); setAmt(''); setNote('')
   }
-  return <form onSubmit={submit}><h1>{e ? 'Edit' : 'Add'} transaction</h1>
+  return <form onSubmit={submit}><h1>{e ? 'Edit transaction' : 'Add transaction'}</h1><p className="page-subtitle">A small entry today makes your money clearer tomorrow.</p>
     {msg && <div className="card notice" role="status">{msg}</div>}{err && <div className="card notice loss" role="alert">{err}</div>}
     <div className="seg"><button type="button" className={type === 'out' ? 'on' : ''} onClick={() => flip('out')}>Expense</button><button type="button" className={type === 'in' ? 'on' : ''} onClick={() => flip('in')}>Income</button></div>
     <label>Amount (₹)<input className="amount" inputMode="decimal" autoFocus placeholder="0" value={amt} onChange={x => setAmt(x.target.value)} /></label>

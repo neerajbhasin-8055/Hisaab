@@ -17,7 +17,7 @@ export default function Settings({ theme, setTheme }: { theme: string; setTheme:
       setMsg(`Restored ${fresh.length} records.${r.skipped ? ` ${r.skipped} invalid records were skipped.` : ''}`)
     } catch { setMsg('That file is not a valid Hisaab backup. Nothing was changed.') }
   }
-  return <><h1>Settings</h1>{msg && <div className="card notice" role="status">{msg}</div>}
+  return <><h1>Settings</h1><p className="page-subtitle">Make Hisaab feel right for you and keep your data safe.</p>{msg && <div className="card notice" role="status">{msg}</div>}
     <section className="card"><h2>Targets for {monthName(month)}</h2><label>Month<input type="month" value={month} onChange={e => e.target.value && pick(e.target.value)} /></label>
       <label>Savings target (₹)<input inputMode="decimal" value={tg} onChange={e => setTg(e.target.value)} /></label><label>Spending budget (₹)<input inputMode="decimal" value={bd} onChange={e => setBd(e.target.value)} /></label>
       <label>Gmail address for reports<input type="email" value={em} onChange={e => setEm(e.target.value)} /></label><button className="btn primary wide" onClick={saveAll}>Save settings</button></section>

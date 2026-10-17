@@ -9,7 +9,7 @@ export default function Reports({ initial }: { initial?: string }) {
   const a = inScope(tx, scope).filter(x => x.date >= from && x.date <= to).sort((x, y) => (x.date + (x.time || '') < y.date + (y.time || '') ? -1 : 1))
   const inc = sum(a, 'in'), ex = sum(a, 'out'), ms = from.slice(0, 7), full = from === ms + '-01' && to === monthEnd(ms), tg = cfg.targets[ms] || 0, bd = cfg.budgets[ms] || 0
   const mail = 'mailto:' + encodeURIComponent(cfg.email) + '?subject=' + encodeURIComponent('Monthly Financial Report — ' + monthName(ms)) + '&body=' + encodeURIComponent(`Hello,\n\nMy Hisaab report for ${from} to ${to} is attached.\n\nIncome: ${fmt(inc)}\nExpenses: ${fmt(ex)}\nNet: ${fmt(inc - ex)}\n`)
-  return <><div className="noprint"><h1>Reports</h1>
+  return <><div className="noprint"><h1>Your reports</h1><p className="page-subtitle">A considered view of where your money goes.</p>
     <div className="grid"><label className="small">From<input type="date" value={from} onChange={e => setFrom(e.target.value)} /></label><label className="small">To<input type="date" value={to} onChange={e => setTo(e.target.value)} /></label></div>
     <div className="grid"><button className="btn" onClick={() => { setFrom(today()); setTo(today()) }}>Today</button><button className="btn" onClick={() => { const m = today().slice(0, 7); setFrom(m + '-01'); setTo(monthEnd(m)) }}>This month</button>
       <button className="btn" onClick={() => { const d = addDays(today().slice(0, 7) + '-01', -1); setFrom(d.slice(0, 7) + '-01'); setTo(d) }}>Last month</button><ScopeSelect value={scope} onChange={setScope} /></div>
