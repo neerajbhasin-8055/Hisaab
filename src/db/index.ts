@@ -54,13 +54,16 @@ export class HisaabDB extends Dexie {
       await this.accounts.bulkAdd(DEFAULT_ACCOUNTS)
     }
 
-    // Seed default categories if none exist
-    const catCount = await this.categories.count()
-    if (catCount === 0) {
-      await this.categories.bulkAdd([
-        ...DEFAULT_EXPENSE_CATEGORIES,
-        ...DEFAULT_INCOME_CATEGORIES
-      ])
+    // Seed missing default categories without replacing or deleting user categories.
+    // This also safely adds newly introduced built-in categories to existing databases.
+    const defaultCategories = [
+      ...DEFAULT_EXPENSE_CATEGORIES,
+      ...DEFAULT_INCOME_CATEGORIES
+    ]
+    const existingCategoryIds = new Set(await this.categories.toCollection().primaryKeys())
+    const missingCategories = defaultCategories.filter(category => !existingCategoryIds.has(category.id))
+    if (missingCategories.length > 0) {
+      await this.categories.bulkAdd(missingCategories)
     }
   }
 }

@@ -18,6 +18,7 @@ export const EXP = [
   'Packaging and delivery',
   'Repairs and maintenance',
   'EMIs and loan payments',
+  'Deductions',
   'Other expenses'
 ]
 

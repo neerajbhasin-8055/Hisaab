@@ -1868,3 +1868,228 @@ h1, h2, h3, h4, p {
 .app-loading-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; background-color: var(--bg); color: var(--text-primary); }
 .loading-spinner-clay { width: 44px; height: 44px; border-radius: 50%; border: 4px solid var(--surface-2); border-top-color: var(--accent-forest); animation: spin 0.8s linear infinite; box-shadow: var(--shadow-clay); }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ==========================================================================
+   Unassigned Transaction Manager & Assignment Modal
+   ========================================================================== */
+
+.unassigned-manager {
+  display: flex;
+  flex-direction: column;
+}
+
+.unassigned-batch-toolbar {
+  padding: 14px 16px;
+  background-color: var(--surface-2);
+  margin-bottom: 14px;
+}
+
+.toolbar-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.select-all-btn {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  user-select: none;
+}
+
+.search-inline-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: min(100%, 200px);
+}
+
+.search-icon-sm {
+  position: absolute;
+  left: 10px;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.search-input-sm {
+  min-height: 34px !important;
+  padding: 4px 10px 4px 30px !important;
+  font-size: 0.8rem !important;
+  border-radius: 9px !important;
+  background-color: var(--surface) !important;
+}
+
+.batch-action-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.individual-assignment-row {
+  justify-content: space-between;
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid var(--border);
+}
+
+.batch-acc-select {
+  flex: 1;
+  min-height: 38px;
+  font-size: 0.84rem;
+}
+
+.unassigned-items-scroll-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.unassigned-item-card {
+  margin-bottom: 0;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  border-radius: 16px;
+  transition: all 0.15s ease;
+}
+
+.unassigned-item-card:hover {
+  border-color: color-mix(in srgb, var(--accent-forest) 30%, var(--border));
+}
+
+.unassigned-item-card.selected {
+  background-color: var(--accent-mint);
+  border-color: color-mix(in srgb, var(--gain) 40%, var(--border));
+}
+
+:root[data-theme='dark'] .unassigned-item-card.selected {
+  background-color: #172D22;
+}
+
+.unassigned-item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.checkbox-btn {
+  all: unset;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.checkbox-btn:hover {
+  background-color: var(--surface-2);
+}
+
+.unassigned-item-details {
+  min-width: 0;
+}
+
+.unassigned-title-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unassigned-cat-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.unassigned-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+
+.unassigned-note {
+  font-style: italic;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.unassigned-item-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.unassigned-amt-badge {
+  font-size: 0.96rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.single-acc-select {
+  min-height: 36px;
+  min-width: 140px;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 9px;
+  background-color: var(--surface);
+}
+
+.all-assigned-celebrate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+}
+
+@media (max-width: 580px) {
+  .unassigned-item-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .unassigned-item-right {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 6px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .single-acc-select {
+    flex: 1;
+    max-width: 60%;
+  }
+
+  .toolbar-top-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-inline-wrap {
+    width: 100%;
+  }
+}
+

@@ -62,6 +62,34 @@ test('Rule 1: Expense reduces account balance & increases period expenses', () =
   assert.equal(summary.netSavings, -50000)
 })
 
+
+test('Deduction category is an outflow and reduces the account balance', () => {
+  const account: Account = {
+    id: 'salary-bank',
+    name: 'Salary Bank',
+    type: 'bank',
+    openingBalance: 5000000,
+    openingDate: '2026-10-01'
+  }
+  const tx: Tx[] = [{
+    id: 'deduction-1',
+    type: 'out',
+    amt: 500000,
+    accountId: account.id,
+    date: '2026-10-30',
+    cat: 'Deductions',
+    cls: 'personal',
+    method: 'Bank transfer',
+    note: 'Salary deduction'
+  }]
+
+  assert.equal(calculateAccountBalance(account, tx), 4500000)
+  const summary = calculatePeriodSummary(tx, '2026-10-01', '2026-10-31')
+  assert.equal(summary.income, 0)
+  assert.equal(summary.expenses, 500000)
+  assert.equal(summary.netSavings, -500000)
+})
+
 test('Rule 2: Income increases account balance & increases period income', () => {
   const bankAcc: Account = {
     id: 'acc-hdfc',
