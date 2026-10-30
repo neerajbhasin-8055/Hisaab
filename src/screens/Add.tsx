@@ -15,6 +15,7 @@ export function Add({ editId, done }: { editId: string | null; done: () => void 
   const incomeCategories = categories.filter(c => c.type === 'in')
 
   const [type, setType] = useState<Kind>(e?.type || 'out')
+  const [deductionMode, setDeductionMode] = useState(Boolean(e?.type === 'out' && /deduction/i.test(e?.cat || '')))
   const [amt, setAmt] = useState(e ? toRupeeString(e.amt) : '')
   const [cat, setCat] = useState(e?.cat || expenseCategories[0]?.name || 'Food and groceries')
   const [cls, setCls] = useState<Cls>(e?.cls || 'personal')
@@ -47,6 +48,7 @@ export function Add({ editId, done }: { editId: string | null; done: () => void 
 
   const flip = (t: Kind) => {
     setType(t)
+    setDeductionMode(false)
     setErr('')
     setSuggestion(null)
     setIsAddingCategory(false)
@@ -63,6 +65,16 @@ export function Add({ editId, done }: { editId: string | null; done: () => void 
     } else {
       setCat(expenseCategories[0]?.name || 'Food and groceries')
     }
+  }
+
+  const chooseDeductions = () => {
+    setType('out')
+    setDeductionMode(true)
+    setCat(categories.find(c => c.type === 'out' && c.name.toLowerCase() === 'deductions')?.name || 'Deductions')
+    setErr('')
+    setSuggestion(null)
+    setIsAddingCategory(false)
+    setNewCatName('')
   }
 
   const handleCreateInlineCategory = async () => {
@@ -159,13 +171,17 @@ export function Add({ editId, done }: { editId: string | null; done: () => void 
       <form onSubmit={submit} className="clay-card add-screen-form">
         <h1 className="page-title">{e ? 'Edit Transaction' : 'Record Transaction'}</h1>
         <p className="page-subtitle">A small entry today makes your money clearer tomorrow.</p>
+        {deductionMode && <div className="notice-banner info" role="status">Deductions are recorded as money going out, so they reduce the selected account balance.</div>}
 
         {msg && <div className="notice-banner success" role="status">{msg}</div>}
         {err && <div className="notice-banner error" role="alert">{err}</div>}
 
         <div className="clay-segment" role="group">
-          <button type="button" className={`clay-seg-btn ${type === 'out' ? 'active expense' : ''}`} onClick={() => flip('out')}>
+          <button type="button" className={`clay-seg-btn ${type === 'out' && !deductionMode ? 'active expense' : ''}`} onClick={() => flip('out')}>
             Expense
+          </button>
+          <button type="button" className={`clay-seg-btn ${deductionMode ? 'active expense' : ''}`} onClick={chooseDeductions}>
+            Deduction
           </button>
           <button type="button" className={`clay-seg-btn ${type === 'in' ? 'active income' : ''}`} onClick={() => flip('in')}>
             Income

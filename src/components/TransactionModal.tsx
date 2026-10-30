@@ -25,6 +25,7 @@ export function TransactionModal({
   const { tx, accounts, categories, saveTx, saveCategory } = useStore()
 
   const [type, setType] = useState<Kind>(editTx?.type || initialType)
+  const [deductionMode, setDeductionMode] = useState(Boolean(editTx?.type === 'out' && /deduction/i.test(editTx?.cat || '')))
   const [amt, setAmt] = useState(editTx ? toRupeeString(editTx.amt) : '')
   const [cat, setCat] = useState(editTx?.cat || '')
   const [cls, setCls] = useState<Cls>(editTx?.cls || 'personal')
@@ -57,6 +58,7 @@ export function TransactionModal({
       setNewCatName('')
       if (editTx) {
         setType(editTx.type)
+        setDeductionMode(editTx.type === 'out' && /deduction/i.test(editTx.cat || ''))
         setAmt(toRupeeString(editTx.amt))
         setCat(editTx.cat)
         setCls(editTx.cls)
@@ -68,6 +70,7 @@ export function TransactionModal({
         setToAccountId(editTx.toAccountId || '')
       } else {
         setType(initialType)
+        setDeductionMode(false)
         setAmt('')
         setNote('')
         setDate(today())
@@ -108,6 +111,7 @@ export function TransactionModal({
 
   const handleTypeChange = (newType: Kind) => {
     setType(newType)
+    setDeductionMode(false)
     setErr('')
     setSuggestion(null)
     setIsAddingCategory(false)
@@ -129,6 +133,16 @@ export function TransactionModal({
         setCat(expenseCategories[0]?.name || 'Food and groceries')
       }
     }
+  }
+
+  const chooseDeductions = () => {
+    setType('out')
+    setDeductionMode(true)
+    setCat(expenseCategories.find(c => c.name.toLowerCase() === 'deductions')?.name || 'Deductions')
+    setErr('')
+    setSuggestion(null)
+    setIsAddingCategory(false)
+    setNewCatName('')
   }
 
   const handleCreateInlineCategory = async () => {
@@ -247,16 +261,24 @@ export function TransactionModal({
       subtitle="Track your financial activity with precision."
     >
       <form onSubmit={handleSubmit} className="tx-form">
+        {deductionMode && <div className="notice-banner info" role="status">Deductions are recorded as money going out, so they reduce the selected account balance.</div>}
         {err && <div className="notice-banner error">{err}</div>}
 
         {/* Transaction Type Segment */}
         <div className="clay-segment" role="group" aria-label="Transaction type">
           <button
             type="button"
-            className={`clay-seg-btn ${type === 'out' ? 'active expense' : ''}`}
+            className={`clay-seg-btn ${type === 'out' && !deductionMode ? 'active expense' : ''}`}
             onClick={() => handleTypeChange('out')}
           >
             Expense
+          </button>
+          <button
+            type="button"
+            className={`clay-seg-btn ${deductionMode ? 'active expense' : ''}`}
+            onClick={chooseDeductions}
+          >
+            Deduction
           </button>
           <button
             type="button"
